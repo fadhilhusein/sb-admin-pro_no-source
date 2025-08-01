@@ -41,35 +41,39 @@
                             <div class="card-body p-5">
                                 <div class="row align-items-center justify-content-between">
                                     <div class="col">
-                                        <h2 class="text-primary">Welcome back, your dashboard is ready!</h2>
-                                        <p class="text-gray-700">Great job, your affiliate dashboard is ready to go! You can view sales, generate links, prepare coupons, and download affiliate reports using this dashboard.</p>
-                                        <a class="btn btn-primary p-3" href="#!">
-                                            Get Started
-                                            <i class="ms-1" data-feather="arrow-right"></i>
+                                        <h2 class="text-primary fw-bolder"><?= $data_surat_detail['data']['namaLatin'] ?></h2>
+                                        <p class="text-gray-700"><?= $data_surat_detail['data']['deskripsi'] ?></p>
+                                        <a class="btn btn-outline-primary p-3" href="#!">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="ms-1" data-feather="play"></i>
+                                                Putar Full Audio
+                                            </div>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-auto col-md-6 mb-4">
+                            <?php 
+                            foreach ($data_surat_detail['data']['ayat'] as $ayat) :
+                            ?>
+                            <div class="col-xl-12 col-md-6 mb-4">
                                 <!-- Dashboard info widget 1-->
                                 <div class="card border-start-lg border-start-primary h-100">
                                     <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1">
-                                                <div class="small fw-bold text-primary mb-1">Earnings (monthly)</div>
-                                                <div class="h5">$4,390</div>
-                                                <div class="text-xs fw-bold text-success d-inline-flex align-items-center">
-                                                    <i class="me-1" data-feather="trending-up"></i>
-                                                    12%
-                                                </div>
+                                        <div class="d-flex align-items-center gap-5">
+                                            <div class="ms-2"><?= $ayat['nomorAyat'] ?></div>
+                                            <div class="flex-grow-1 text-end">
+                                                <div class="fw-bold text-black h4 mb-2"><?= $ayat['teksArab'] ?></div>
+                                                <div class="text-grey text-break"><?= $ayat['teksIndonesia'] ?></div>
                                             </div>
-                                            <div class="ms-2"><i class="fas fa-dollar-sign fa-2x text-gray-200"></i></div>
                                         </div>
-                                    </div>
+                                    </div> 
                                 </div>
                             </div>
+                            <?php 
+                            endforeach;
+                            ?>
                         </div>
                     </div>
                 </main>

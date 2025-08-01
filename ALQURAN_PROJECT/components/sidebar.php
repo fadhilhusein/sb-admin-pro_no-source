@@ -19,7 +19,7 @@
         <span class="badge bg-success-soft text-success ms-auto">2 New!</span>
     </a>
     <!-- Sidenav Menu Heading (Core)-->
-    <div class="sidenav-menu-heading">Core</div>
+    <div class="sidenav-menu-heading">AL-QUR'AN ONLINE</div>
     <!-- Sidenav Accordion (Dashboard)-->
     <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
         <div class="nav-link-icon"><i data-feather="book-open"></i></div>
@@ -27,29 +27,17 @@
         <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
     </a>
     <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
-        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+        <nav class="sidenav-menu-nested nav accordion gap-2" id="accordionSidenavPages">
             <?php 
             foreach ($data_objek['data'] as $surat):
             ?>
-            <a class="nav-link" href="surat.php?nomor=<?= $surat['nomor'] ?>">
-                <?= $surat['namaLatin'] ?>
-                <span class="badge bg-primary-soft text-primary ms-auto"><?= $surat['tempatTurun'] ?></span>
+            <a class="nav-link flex-column align-items-start gap-3 border border-1 mx-2 bg-success bg-opacity-10" href="surat.php?nomor=<?= $surat['nomor'] ?>">
+                (<?= $surat['nomor'] ?>) <?= $surat['namaLatin'] ?>
+                <span class="badge bg-primary-soft text-primary"><?= $surat['tempatTurun'] ?></span>
             </a>
             <?php 
             endforeach;
             ?>
         </nav>
     </div>
-    <!-- Sidenav Heading (Addons)-->
-    <div class="sidenav-menu-heading">Plugins</div>
-    <!-- Sidenav Link (Charts)-->
-    <a class="nav-link" href="charts.html">
-        <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
-        Charts
-    </a>
-    <!-- Sidenav Link (Tables)-->
-    <a class="nav-link" href="tables.html">
-        <div class="nav-link-icon"><i data-feather="filter"></i></div>
-        Tables
-    </a>
 </div>

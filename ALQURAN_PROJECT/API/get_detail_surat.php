@@ -13,5 +13,5 @@ if (curl_error($ch)) {
 
 curl_close($ch);
 
-$data_objek = json_decode($response, true);
+$data_surat_detail = json_decode($response, true);
 ?>
