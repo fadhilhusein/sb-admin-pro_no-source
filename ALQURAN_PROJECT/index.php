@@ -29,7 +29,7 @@ $data_objek = json_decode($response, true);
     foreach ($data_objek['data'] as $surat):
     ?>
         <div class="my-2 mx-2">
-            <button class="btn btn-primary"><?= $surat['namaLatin'] . " : " . $surat['jumlahAyat']; ?></button>
+            <button class="btn btn-primary"><?= $surat['namaLatin'] . " : " . $surat['jumlahAyat'] . " Ayat" ?></button>
         </div>
     <?php 
     endforeach;
