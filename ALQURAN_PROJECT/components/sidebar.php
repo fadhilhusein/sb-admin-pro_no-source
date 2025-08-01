@@ -31,7 +31,10 @@
             <?php 
             foreach ($data_objek['data'] as $surat):
             ?>
-                <a class="nav-link" href="#"><?= $surat['namaLatin'] ?></a>
+            <a class="nav-link" href="surat.php?nomor=<?= $surat['nomor'] ?>">
+                <?= $surat['namaLatin'] ?>
+                <span class="badge bg-primary-soft text-primary ms-auto"><?= $surat['tempatTurun'] ?></span>
+            </a>
             <?php 
             endforeach;
             ?>
