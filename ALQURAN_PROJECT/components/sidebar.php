@@ -1,3 +1,5 @@
+<?php include __DIR__ . '/../API/get_all_surat.php' ?>
+
 <div class="nav accordion" id="accordionSidenav">
     <!-- Sidenav Menu Heading (Account)-->
     <!-- * * Note: * * Visible only on and above the sm breakpoint-->
@@ -26,12 +28,13 @@
     </a>
     <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-            <a class="nav-link" href="dashboard-1.html">
-                Default
-                <span class="badge bg-primary-soft text-primary ms-auto">Updated</span>
-            </a>
-            <a class="nav-link" href="dashboard-2.html">Multipurpose</a>
-            <a class="nav-link" href="dashboard-3.html">Affiliate</a>
+            <?php 
+            foreach ($data_objek['data'] as $surat):
+            ?>
+                <a class="nav-link" href="#"><?= $surat['namaLatin'] ?></a>
+            <?php 
+            endforeach;
+            ?>
         </nav>
     </div>
     <!-- Sidenav Heading (Addons)-->
