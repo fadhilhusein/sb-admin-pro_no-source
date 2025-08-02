@@ -33,7 +33,7 @@
             ?>
             <a class="nav-link flex-column align-items-start gap-3 border border-1 mx-2 bg-success bg-opacity-10" href="surat.php?nomor=<?= $surat['nomor'] ?>">
                 (<?= $surat['nomor'] ?>) <?= $surat['namaLatin'] ?>
-                <span class="badge bg-primary-soft text-primary"><?= $surat['tempatTurun'] ?></span>
+                <div class="badge bg-primary-soft text-primary p-1 d-flex align-items-center gap-1"><i data-feather="map-pin"></i><span class="align-self-end"><?= $surat['tempatTurun'] ?></span></div>
             </a>
             <?php 
             endforeach;
