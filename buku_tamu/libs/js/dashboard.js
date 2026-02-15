@@ -7,7 +7,7 @@ function updateClock() {
     $("#time-view").html(`${hours}:${minute}:${second}`);
 }
 
-$(".btn_checkout").click(function() {
+$(".tabel_tamu").on("click", "tbody tr td .btn_checkout", function() {
     let tabel_tamu = document.querySelector(".tabel_tamu");
     let id_tamu = $(this).attr('id');
     let data = {

@@ -1,4 +1,8 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+};
+
 require __DIR__ . "/../config/init.php";
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -27,36 +31,42 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             }
 
             // Generate Nama File Unik (Tambahkan random number agar tidak bentrok)
+            date_default_timezone_set('Asia/Jakarta'); // Set timezone agar nama file sesuai waktu lokal
             $cleanFileName = date("YmdHis") . "_" . rand(100, 999) . "." . $ext;
 
             $destination = $uploadDir . $cleanFileName; // Path untuk move_uploaded_file
 
             // --- PROSES UPLOAD ---
             if (move_uploaded_file($_FILES['photo_pengunjung']['tmp_name'], $destination)) {
+                try {
+                    // --- PROSES DATABASE ---
+                    $sql = "INSERT INTO master_tamu (id_program, nama, no_hp, asal_instansi, nama_tujuan, departemen_tujuan, status_janji, photo_tamu, status_kedatangan) VALUES (:id_program, :nama, :no_hp, :asal_instansi, :nama_tujuan, :departemen_tujuan, :status_janji, :link_photo, :status_kedatangan)";
+    
+                    $stmt = $pdo->prepare($sql);
+    
+                    $data = [
+                        'id_program' => $_SESSION['app_config']['id'],
+                        'nama' => $_POST['nama_pengunjung'],
+                        'no_hp' => $_POST['nomor_pengunjung'],
+                        'asal_instansi' => $_POST['instansi_pengunjung'],
+                        'nama_tujuan' => $_POST['nama_tujuan'],
+                        'departemen_tujuan' => $_POST['departemen_tujuan'],
+                        'status_janji' => $_POST['status_janji'],
+                        'link_photo' => $cleanFileName, // SIMPAN NAMA FILE SAJA (Lebih Fleksibel)
+                        'status_kedatangan' => $_POST['status_tamu']
+                    ];
 
-                // --- PROSES DATABASE ---
-                $sql = "INSERT INTO master_tamu (kode_program, nama, no_hp, asal_instansi, nama_tujuan, departemen_tujuan, status_janji, link_photo, status_tamu) VALUES (:kode_program, :nama, :no_hp, :asal_instansi, :nama_tujuan, :departemen_tujuan, :status_janji, :link_photo, :status_tamu)";
-
-                $stmt = $pdo->prepare($sql);
-
-                $data = [
-                    'kode_program' => $_POST['kode_program'],
-                    'nama' => $_POST['nama_pengunjung'],
-                    'no_hp' => $_POST['nomor_pengunjung'],
-                    'asal_instansi' => $_POST['instansi_pengunjung'],
-                    'nama_tujuan' => $_POST['nama_tujuan'],
-                    'departemen_tujuan' => $_POST['departemen_tujuan'],
-                    'status_janji' => $_POST['status_janji'],
-                    'link_photo' => $cleanFileName, // SIMPAN NAMA FILE SAJA (Lebih Fleksibel)
-                    'status_tamu' => $_POST['status_tamu']
-                ];
-
-                if ($stmt->execute($data)) {
-                    echo json_encode(['type' => 'success', 'title' => 'Check in berhasil', 'message' => 'Data tamu berhasil disimpan!']);
-                } else {
-                    // Jika insert DB gagal, hapus file yang sudah terlanjur diupload (Clean up)
-                    unlink($destination);
-                    echo json_encode(['type' => 'warning', 'title' => 'Check in gagal', 'message' => 'Gagal menyimpan ke database.']);
+                    if ($stmt->execute($data)) {
+                        echo json_encode(['type' => 'success', 'title' => 'Check in berhasil', 'message' => 'Data tamu berhasil disimpan!']);
+                    } else {
+                        // Jika insert DB gagal, hapus file yang sudah terlanjur diupload (Clean up)
+                        unlink($destination);
+                        echo json_encode(['type' => 'warning', 'title' => 'Check in gagal', 'message' => 'Gagal menyimpan ke database.']);
+                    }
+                } catch (PDOException $e) {
+                    // Jika terjadi error database, atau mendapat message dari trigger
+                    echo json_encode(['type' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
+                    exit;
                 }
             } else {
                 echo json_encode(['type' => 'warning', 'title' => 'Terjadi kesalahan', 'message' => 'Gagal mengupload gambar. Periksa permission folder.']);
@@ -68,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $id_tamu = $_POST['id_tamu'];
 
         // Update status tamu menjadi out
-        $query = "UPDATE master_tamu SET status_tamu = 'out' WHERE id_tamu = ?";
+        $query = "UPDATE master_tamu SET status_kedatangan = 'Check Out' WHERE id = ?";
         $stmt = $pdo->prepare($query);
         $stmt->execute([$id_tamu]);
 

@@ -33,12 +33,16 @@ $('#form_buku').on("submit", function (e) {
             Swal.fire({
                 title: data.title,
                 text: data.message,
-                icon: data.type
+                icon: data.type,
+                confirmButtonText: 'OK'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    window.location.reload();
+                }
             });
 
             $("#preview-image").hide();
             $("#place-holder").show();
-            $("#form_buku").reset()
             return;
         }
     });

@@ -9,11 +9,11 @@ include_once __DIR__ . "/../libs/php/auth.php";
 loginState();
 
 // Informasi langganan
-$informasiWaktuLangganan = hitungSisaMasaAktif($appConfig['expire_date']);
+$informasiWaktuLangganan = hitungSisaMasaAktif($appConfig['expired_date']);
 $tanggalHariIni = formatTanggalIndo();
-$listTamuSedangBerkunjung = todayList(kode_program);
-$kuotaTerpakai = queryTamu("SELECT COUNT(id_tamu) AS kuota_terpakai FROM master_tamu WHERE kode_program ='" . kode_program . "'");
-$listTamuHariIni = queryTamu("SELECT COUNT(id_tamu) AS total_tamu FROM master_tamu WHERE kode_program = '" . kode_program . "' AND DATE(tanggal_kunjungan) = '" . date('Y-m-d') . "'");
+$listTamuSedangBerkunjung = todayList($_SESSION['app_config']['id']);
+$kuotaTerpakai = queryTamu("SELECT kuota_tamu FROM master_program WHERE kode_program ='" . kode_program . "'");
+$listTamuHariIni = queryTamu("SELECT COUNT(id) AS total_tamu FROM master_tamu WHERE id_program = '" . $_SESSION['app_config']['id'] . "' AND DATE(tanggal_kunjungan) = '" . date('Y-m-d') . "'");
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +100,7 @@ $listTamuHariIni = queryTamu("SELECT COUNT(id_tamu) AS total_tamu FROM master_ta
                                     <div class="h-100 d-flex align-items-center">
                                         <div class="flex-grow-1">
                                             <div class="small fw-bold text-secondary mb-1">Sisa kuota tamu</div>
-                                            <div class="h5"><?= $kuotaTerpakai['kuota_terpakai'] ?>/<?= $appConfig['max_tamu'] ?></div>
+                                            <div class="h5"><?= $kuotaTerpakai['kuota_tamu'] ?></div>
                                             <!-- <div class="text-xs fw-bold text-success d-inline-flex align-items-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up me-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                                                     12%
@@ -184,14 +184,14 @@ $listTamuHariIni = queryTamu("SELECT COUNT(id_tamu) AS total_tamu FROM master_ta
                                             <?php
                                             if ($listTamuSedangBerkunjung):
                                                 foreach ($listTamuSedangBerkunjung as $tamu): ?>
-                                                    <tr id="<?= $tamu['id_tamu'] ?>">
+                                                    <tr id="<?= $tamu['id'] ?>">
                                                         <td><?= $tamu['nama'] ?></td>
                                                         <td><?= $tamu['asal_instansi'] ?></td>
                                                         <td>Bertemu dengan <?= $tamu['nama_tujuan'] ?> di <?= $tamu['departemen_tujuan'] ?></td>
                                                         <td><?= $tamu['waktu_kunjungan'] ?></td>
-                                                        <td><a target="_blank" href="../uploads/<?= $tamu['link_photo'] ?>">Photo tamu</a></td>
+                                                        <td><a target="_blank" href="../uploads/<?= $tamu['photo_tamu'] ?>">Photo tamu</a></td>
                                                         <td>
-                                                            <button id="<?= $tamu['id_tamu'] ?>" class="btn btn-sm btn-danger btn_checkout">Check out</button>
+                                                            <button id="<?= $tamu['id'] ?>" class="btn btn-sm btn-danger btn_checkout">Check out</button>
                                                         </td>
                                                     </tr>
                                             <?php

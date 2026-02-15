@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 include_once __DIR__ . "/../libs/php/auth.php";
 loginState();
 
-$masaAktif = hitungSisaMasaAktif($appConfig['expire_date']);
+$masaAktif = hitungSisaMasaAktif($appConfig['expired_date']);
 ?>
 
 
@@ -66,7 +66,7 @@ $masaAktif = hitungSisaMasaAktif($appConfig['expire_date']);
                                             <input id="nama_pengunjung" name="nama_pengunjung" type="text" class="form-control form-control-sm" required>
                                             <input class="d-none" name="photo_pengunjung" id="photo-tamu" type="file" accept="image/*" capture="environment">
                                             <input class="d-none" type="text" name="kode_program" value="<?= $appConfig['kode_program'] ?>">
-                                            <input class="d-none" type="text" name="status_tamu" value="in">
+                                            <input class="d-none" type="text" name="status_tamu" value="Check In">
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
@@ -92,8 +92,8 @@ $masaAktif = hitungSisaMasaAktif($appConfig['expire_date']);
                                             <label for="status_janji" class="small form-label">Ada janji temu? <span style="color: red;">*</span></label>
                                             <select class="form-select" id="status_janji" name="status_janji" aria-label="Default select example" required>
                                                 <option value="" selected>Pilih status janji</option>
-                                                <option value="Y">Ada</option>
-                                                <option value="N">Tidak</option>
+                                                <option value="Sudah Janji">Ada</option>
+                                                <option value="Belum Janji">Tidak</option>
                                             </select>
                                         </div>
                                         <button class="btn btn-primary" id="simpan_buku" type="submit">Simpan</button>

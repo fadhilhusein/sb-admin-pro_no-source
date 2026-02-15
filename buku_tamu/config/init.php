@@ -31,7 +31,7 @@ function loadAppConfig($pdo, $kode_program_input)
 {
     // Cek apakah ada session
     if (isset($_SESSION['app_config']) && $_SESSION['app_config']['kode_program'] === $kode_program_input) {
-        return $_SESSION['app_confing'];
+        return $_SESSION['app_config'];
     }
 
     // Kalau tidak ada session maka ambil dari DB
@@ -40,7 +40,7 @@ function loadAppConfig($pdo, $kode_program_input)
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
-        $_SESSION['app_confing'] = $result;
+        $_SESSION['app_config'] = $result;
         return $result;
     } else {
         die("Konfigurasi Error: Kode Program '" . htmlspecialchars($kode_program_input) . "' tidak ditemukan di database master.");
@@ -103,13 +103,13 @@ function hitungSisaMasaAktif($expireDateString)
     }
 }
 
-function todayList($kode_program = null)
+function todayList($id_program = null)
 {
     global $pdo;
 
     $currentDate = date("Y-m-d");
 
-    $query = "SELECT *, DATE_FORMAT(tanggal_kunjungan, '%H:%i') AS waktu_kunjungan FROM master_tamu WHERE kode_program='{$kode_program}' AND DATE(tanggal_kunjungan) = '{$currentDate}' AND status_tamu = 'in'";
+    $query = "SELECT *, DATE_FORMAT(tanggal_kunjungan, '%H:%i') AS waktu_kunjungan FROM master_tamu WHERE id_program='{$id_program}' AND DATE(tanggal_kunjungan) = '{$currentDate}' AND status_kedatangan = 'Check In'";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $results = [];
@@ -223,8 +223,6 @@ function queryTamu($query, $data = null, $multipleRow = false)
 
 // Configurasi Aplikasi
 $appConfig = loadAppConfig($pdo, kode_program);
-// Init auth
-$auth = new \Delight\Auth\Auth($pdo);
 
 // ---- Mengambil current URL Path
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
